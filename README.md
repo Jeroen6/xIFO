@@ -10,7 +10,7 @@ But further optimisation suggestions are welcome, as long as it stays C.
 
 **The default types are:**
 
-xifo8_t, xifo16_t, xifo32_t, xifo64_t
+xifo8_t, xifo16_t, xifo32_t, xifo64_t and *xifo<T>* which is C++ only.
 
 Which work internally with:
 
