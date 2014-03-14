@@ -12,24 +12,6 @@
  * @{
  */
 
-/**
- *	Code has been tested on Cortex M0 (LPC1114)
- *  Performance table, number of core clocks
- *	Measured with a timer before and after
- *	r1 = timer->TC
- *		test_function
- *  r2 = timer->TC
- *
- *  Function	Speed	Worst Case
- *
- *  write		0       0
- *  read_mr		0       0
- *  read_lr		0       0
- *  pop_mr		0       0
- *	pop_lr		0       0
- *
- */
-
 //#define CUSTOMIZED    /** @brief Uncomment this line to unlock the file */
 
 #if !defined(CUSTOMIZED) || defined(__DOXYGEN__)
@@ -60,12 +42,6 @@ typedef struct  {
     uint32_t full;          /**< @brief Flag indicating buffer is full */
     uint32_t count;  /**< @brief Number of elements used */
     uint32_t size;			/**< @brief Size of buffer */
-    /* Locally used in functions to prevent stack use: */
-    /**< @brief union to prevent lvalue typecasting */
-    union {
-        SIZETYPE temp;		/**< @brief temp variable and padding for even sized block */
-        SIZETYPE *ptemp; 	/**< @brief temp variable and padding for even sized block */
-    };
 }xifo_SIZETYPE_t;
 
 /**< @brief   Circular Buffer memory pool type. */
