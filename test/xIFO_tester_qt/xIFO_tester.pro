@@ -21,11 +21,13 @@ SOURCES += \
     ../../xIFO_32/xIFO_32.c \
     ../../xIFO_64/xIFO_64.c \
     ../../xIFO_type/xIFO_SizeType.c \
-    main.cpp
+    main.cpp \
+    ../../xIFO_cpp/xIFO.cpp
 
 HEADERS += \
     ../../xIFO_8/xIFO_8.h \
     ../../xIFO_16/xIFO_16.h \
     ../../xIFO_32/xIFO_32.h \
     ../../xIFO_64/xIFO_64.h \
-    ../../xIFO_type/xIFO_SizeType.h
+    ../../xIFO_type/xIFO_SizeType.h \
+    ../../xIFO_cpp/xIFO.h

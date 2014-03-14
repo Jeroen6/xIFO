@@ -2,7 +2,7 @@
 /**
  * @file    xifo_SizeType.c
  * @brief   xifo circular buffer for custom elements
- * @details xifo supplies object oriented circular buffer with 32 bit size elements. \n
+ * @details xifo supplies object oriented circular buffer with custom bit size elements. \n
  * 			To use either as FIFO (First In First Out) or as FILO (First In Last Out)
  *
  * @Author	Jeroen Lodder
@@ -27,7 +27,7 @@ void xifo_SIZETYPE_init(xifo_SIZETYPE_t *c, uint32_t s, xifo_SIZETYPE_pool_t *sp
     c->endpool  		= &sp[s-1];
     c->size 			= s;
     c->full 			= 0;
-    c->count 	= 0;
+    c->count            = 0;
     c->read 			= sp;
     c->write			= sp;
 }
@@ -40,9 +40,9 @@ void xifo_SIZETYPE_init(xifo_SIZETYPE_t *c, uint32_t s, xifo_SIZETYPE_pool_t *sp
  * @param[in] c   Pointer to @p xifo_SIZETYPE_t object.
  */
 void xifo_SIZETYPE_clear(xifo_SIZETYPE_t *c){
-    c->ptemp = c->startpool;
-    while(c->ptemp <= c->endpool){
-        *c->ptemp++ = 0;
+    register SIZETYPE *ptemp = c->startpool;
+    while(ptemp <= c->endpool){
+        *ptemp++ = 0;
     }
 }
 
@@ -64,6 +64,7 @@ void xifo_SIZETYPE_clear(xifo_SIZETYPE_t *c){
  * @return	Contents of element or 0 if failed (element can hold 0)
  */
 SIZETYPE xifo_read_lr(xifo_SIZETYPE_t *c, uint32_t index){
+    register SIZETYPE *ptemp;
     /* Verify there is valid data to read */
     if(index+1 > c->count){
         return 0;	/* Nothing to read there */
@@ -71,15 +72,15 @@ SIZETYPE xifo_read_lr(xifo_SIZETYPE_t *c, uint32_t index){
     /* Calculate index of oldest element */
     index = (c->count-1) - index;
     /* Set pointer */
-    c->ptemp = (c->read) - index;
-    if(c->ptemp < c->startpool){
+    ptemp = (c->read) - index;
+    if(ptemp < c->startpool){
         /* We exceeded pool boundaries */
         /* Calculate overshoot (startpool - indexptr) and subtract from end */
         /* Since one element of overshoot results in end - 1 you would miss the last value */
-        c->ptemp = (c->endpool+1) - (c->startpool - c->ptemp);
+        ptemp = (c->endpool+1) - (c->startpool - ptemp);
     }
     /* Read most recent */
-    return *c->ptemp;
+    return *ptemp;
 }
 
 /**
@@ -100,21 +101,22 @@ SIZETYPE xifo_read_lr(xifo_SIZETYPE_t *c, uint32_t index){
  * @return	Contents of element or 0 if failed (element can hold 0)
  */
 SIZETYPE xifo_read_mr(xifo_SIZETYPE_t *c, uint32_t index){
+    register SIZETYPE *ptemp;
     /* Verify there is valid data to read */
     if(index+1 > c->count){
         return 0;	/* Nothing to read there */
     }
     /* Set pointer */
-    c->ptemp = (c->read) - index;
+    ptemp = (c->read) - index;
     /* Validate pointer */
-    if(c->ptemp < c->startpool){
+    if(ptemp < c->startpool){
         /* We exceeded pool boundaries */
         /* Calculate overshoot (startpool - indexptr) and subtract from end */
         /* Since one element of overshoot results in end - 1 you would miss the last value */
-        c->ptemp = (c->endpool+1) - (c->startpool - c->ptemp);
+        ptemp = (c->endpool+1) - (c->startpool - ptemp);
     }
     /* Read most recent */
-    return *c->ptemp;
+    return *ptemp;
 }
 
 /**
@@ -132,12 +134,13 @@ SIZETYPE xifo_read_mr(xifo_SIZETYPE_t *c, uint32_t index){
  * @return	Contents of element or 0 if failed (element can hold 0)
  */
 SIZETYPE xifo_pop_mr(xifo_SIZETYPE_t *c){
+    register SIZETYPE temp;
     /* Verify there is valid data read */
     if(c->count == 0){
         return 0;	/* Nothing to read there */
     }
     /* Read */
-    c->temp = *c->read;
+    temp = *c->read;
     /* Empty */
     *c->read = 0;
     /* Most recent element read, return write pointer */
@@ -153,7 +156,7 @@ SIZETYPE xifo_pop_mr(xifo_SIZETYPE_t *c){
     c->count--;
     if(c->count < c->size)
         c->full = 0;
-    return c->temp;
+    return temp;
 }
 
 /**
@@ -171,35 +174,37 @@ SIZETYPE xifo_pop_mr(xifo_SIZETYPE_t *c){
  * @return	Contents of element or 0 if failed (element can hold 0)
  */
 SIZETYPE xifo_pop_lr(xifo_SIZETYPE_t *c){
+    register SIZETYPE *ptemp;
+    register SIZETYPE temp;
     /* Verify there is valid data read */
     if(c->count == 0){
         return 0;	/* Nothing to read there */
     }
     /* Derive least recent buffer element */
-    c->ptemp = c->read+1 - c->count;
+    ptemp = c->read+1 - c->count;
     /* Validate pointer */
-    if(c->ptemp < c->startpool){
+    if(ptemp < c->startpool){
         /* We exceeded pool boundaries */
         /* Calculate overshoot (startpool - indexptr) and subtract from end */
         /* Since one element of overshoot results in end - 1 you would miss the last value */
-        c->ptemp = (c->endpool+1) - (c->startpool - c->ptemp);
+        ptemp = (c->endpool+1) - (c->startpool - ptemp);
     }
     /* Read oldest buffer element */
     { /* block with temporary variable to prevent stack use */
         register uint32_t element;
         /* Read to temp register */
-        element = *c->ptemp;
+        element = *ptemp;
         /* Empty */
-        *c->ptemp = 0;
+        *ptemp = 0;
         /* Clear temp register */
-        c->temp = element;
+        temp = element;
     }
     /* Reduce count */
     c->count--;
     /* Check full flag */
     if(c->count < c->size)
         c->full = 0;
-    return c->temp;
+    return temp;
 }
 
 /**
@@ -283,5 +288,6 @@ uint32_t xifo_get_free(xifo_SIZETYPE_t *c){
 uint32_t xifo_get_full(xifo_SIZETYPE_t *c){
     return c->full;
 }
+
 
 /** @} */

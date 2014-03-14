@@ -2,7 +2,7 @@
 /**
  * @file    xifo_16.c
  * @brief   xifo circular buffer with 16 bit elements
- * @details xifo supplies object oriented circular buffer with 32 bit size elements. \n
+ * @details xifo supplies object oriented circular buffer with 16 bit size elements. \n
  * 			To use either as FIFO (First In First Out) or as FILO (First In Last Out)
  *
  * @Author	Jeroen Lodder
@@ -27,7 +27,7 @@ void xifo16_init(xifo16_t *c, uint32_t s, uint16_t *sp){
     c->endpool  		= &sp[s-1];
     c->size 			= s;
     c->full 			= 0;
-    c->count 	= 0;
+    c->count            = 0;
     c->read 			= sp;
     c->write			= sp;
 }

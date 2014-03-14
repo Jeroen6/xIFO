@@ -12,24 +12,6 @@
  * @{
  */
 
-/**
- *	Code has been tested on Cortex M0 (LPC1114)
- *  Performance table, number of core clocks
- *	Measured with a timer before and after
- *	r1 = timer->TC
- *		test_function
- *  r2 = timer->TC
- *
- *  Function	Speed		Worst Case
- *
- *  write		0       0
- *  read_mr		0       0
- *  read_lr		0       0
- *  pop_mr		0       0
- *	pop_lr		0       0
- *
- */
-
 #ifndef _xifo_64_H_
 #define _xifo_64_H_
 
@@ -47,7 +29,7 @@ typedef struct  {
     uint64_t *write;		/**< @brief Write pointer */
     /* Variables: */
     uint32_t full;          /**< @brief Flag indicating buffer is full */
-    uint32_t count;  /**< @brief Number of elements used */
+    uint32_t count;         /**< @brief Number of elements used */
     uint32_t size;			/**< @brief Size of buffer */
 }xifo64_t;
 
