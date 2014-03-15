@@ -24,8 +24,8 @@
  */
 void xifo64_init(xifo64_t *c, uint32_t s, uint64_t *sp){
     c->startpool		= sp;
-    c->endpool  		= &sp[s-1];
     c->size 			= s;
+    c->endpool  		= &sp[--s];
     c->full 			= 0;
     c->count            = 0;
     c->read 			= sp;
@@ -41,7 +41,9 @@ void xifo64_init(xifo64_t *c, uint32_t s, uint64_t *sp){
  */
 void xifo64_clear(xifo64_t *c){
     register uint64_t *ptemp = c->startpool;
-    while(ptemp <= c->endpool){
+    register uint32_t i = c->size;
+    while(i--){
+
         *ptemp++ = 0;
     }
 }
@@ -66,7 +68,7 @@ void xifo64_clear(xifo64_t *c){
 uint64_t xifo64_read_lr(xifo64_t *c, uint32_t index){
     register uint64_t *ptemp;
     /* Verify there is valid data to read */
-    if(index+1 > c->count){
+    if(index >= c->count){
         return 0;	/* Nothing to read there */
     }
     /* Calculate index of oldest element */
@@ -74,7 +76,7 @@ uint64_t xifo64_read_lr(xifo64_t *c, uint32_t index){
     /* Set pointer */
     ptemp = (c->read) - index;
     if(ptemp < c->startpool){
-        /* We exceeded pool boundaries */
+        /* Exceeded pool boundaries */
         /* Calculate overshoot (startpool - indexptr) and subtract from end */
         /* Since one element of overshoot results in end - 1 you would miss the last value */
         ptemp = (c->endpool+1) - (c->startpool - ptemp);
@@ -103,14 +105,14 @@ uint64_t xifo64_read_lr(xifo64_t *c, uint32_t index){
 uint64_t xifo64_read_mr(xifo64_t *c, uint32_t index){
     register uint64_t *ptemp;
     /* Verify there is valid data to read */
-    if(index+1 > c->count){
+    if(index >= c->count){
         return 0;	/* Nothing to read there */
     }
     /* Set pointer */
     ptemp = (c->read) - index;
     /* Validate pointer */
     if(ptemp < c->startpool){
-        /* We exceeded pool boundaries */
+        /* Exceeded pool boundaries */
         /* Calculate overshoot (startpool - indexptr) and subtract from end */
         /* Since one element of overshoot results in end - 1 you would miss the last value */
         ptemp = (c->endpool+1) - (c->startpool - ptemp);
@@ -149,7 +151,7 @@ uint64_t xifo64_pop_mr(xifo64_t *c){
     c->read--;
     /* Validate pointer */
     if( c->read < c->startpool ){
-        /* We exceeded pool boundaries */
+        /* Exceeded pool boundaries */
         c->read = c->endpool;
     }
     /* Reduce count */
@@ -181,10 +183,10 @@ uint64_t xifo64_pop_lr(xifo64_t *c){
         return 0;	/* Nothing to read there */
     }
     /* Derive least recent buffer element */
-    ptemp = c->read+1 - c->count;
+    ptemp = (c->read+1) - c->count;
     /* Validate pointer */
     if(ptemp < c->startpool){
-        /* We exceeded pool boundaries */
+        /* Exceeded pool boundaries */
         /* Calculate overshoot (startpool - indexptr) and subtract from end */
         /* Since one element of overshoot results in end - 1 you would miss the last value */
         ptemp = (c->endpool+1) - (c->startpool - ptemp);
@@ -223,7 +225,7 @@ uint32_t xifo64_write(xifo64_t *c, uint64_t data){
     /* Update read pointer to most recent element */
     c->read = c->write;
     /* Write pointer increment */
-    c->write += 1;
+    c->write++;
     /* Validate pointer */
     if( c->write > c->endpool){
         /* We exceeded pool boundaries */
