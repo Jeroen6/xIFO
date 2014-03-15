@@ -16,8 +16,8 @@ TEMPLATE = app
 
 
 SOURCES += \
-    ../../xIFO/xIFO.c \
-    main.cpp
+    main.cpp \
+    ../../xIFO/xIFO.cpp
 
 HEADERS += \
     ../../xIFO/xIFO.h

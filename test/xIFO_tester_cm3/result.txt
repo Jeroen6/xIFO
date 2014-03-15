@@ -1,0 +1,33 @@
+Testing xifo, all single call average times in sysclks
+
+Testing xifo8
+Init:   	36
+Clear:  	68
+Write 8:	53
+Read 8: 	88
+Write 4:	55
+Pop 8:  	84
+
+Testing xifo16
+Init:   	36
+Clear:  	69
+Write 8:	50
+Read 8: 	83
+Write 4:	52
+Pop 8:  	85
+
+Testing xifo32
+Init:   	45
+Clear:  	68
+Write 8:	52
+Read 8: 	83
+Write 4:	54
+Pop 8:  	82
+
+Testing xifo64
+Init:   	41
+Clear:  	105
+Write 8:	53
+Read 8: 	89
+Write 4:	54
+Pop 8:  	98
