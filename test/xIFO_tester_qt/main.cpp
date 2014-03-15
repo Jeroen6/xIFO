@@ -13,11 +13,7 @@
 #include <QCoreApplication>
 #include <QTextStream>
 
-#include "../../xIFO_8/xIFO_8.h"
-#include "../../xIFO_16/xIFO_16.h"
-#include "../../xIFO_32/xIFO_32.h"
-#include "../../xIFO_64/xIFO_64.h"
-#include "../../xIFO_cpp/xIFO.h"
+#include "../../xIFO/xIFO.h"
 
 int main(int argc, char *argv[])
 {

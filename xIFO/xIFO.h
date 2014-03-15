@@ -11,14 +11,45 @@
  *
  * @{
  */
-
 #ifndef _xifo_H_
 #define _xifo_H_
+ 
 #include <inttypes.h>
 
+#if !defined(TRUE) || defined(__DOXYGEN__)
+#define TRUE 	(1)
+#endif
+#if !defined(FALSE) || defined(__DOXYGEN__)
+#define FALSE 	!(TRUE)
+#endif
+ 
+#ifdef __cplusplus
+#if !defined(xIFO_USE_CPP) || defined(__DOXYGEN__)
+#define xIFO_USE_CPP			TRUE
+#endif
+#endif
+
+#if !defined(xIFO_USE_64BIT) || defined(__DOXYGEN__)
+#define xIFO_USE_64BIT			TRUE
+#endif
+
+#if !defined(xIFO_USE_32BIT) || defined(__DOXYGEN__)
+#define xIFO_USE_32BIT			TRUE
+#endif
+
+#if !defined(xIFO_USE_16BIT) || defined(__DOXYGEN__)
+#define xIFO_USE_16BIT			TRUE
+#endif
+
+#if !defined(xIFO_USE_8BIT) || defined(__DOXYGEN__)
+#define xIFO_USE_8BIT			TRUE
+#endif
+
+
+#if xIFO_USE_CPP == TRUE
 /**
  * @brief   Circular Buffer object.
- * @details This struct holds the object of a circular buffer
+ * @details This class holds the object of a circular buffer
  */
 template <class xifo_dtype>
 class Xifo
@@ -296,7 +327,181 @@ private:
     uint32_t icount;         /**< @brief Number of elements used */
     uint32_t isize;          /**< @brief Size of buffer */
 };
+#endif
 
+#if xIFO_USE_64BIT == TRUE
+/**
+ * @brief   Circular Buffer object.
+ * @details This struct holds the object of a circular buffer
+ */
+typedef struct  {
+    /* Pointers: */
+    uint64_t *startpool;    /**< @brief First element in pool */
+    uint64_t *endpool;      /**< @brief Last element in pool */
+    uint64_t *read;			/**< @brief Read pointer */
+    uint64_t *write;		/**< @brief Write pointer */
+    /* Variables: */
+    uint32_t full;          /**< @brief Flag indicating buffer is full */
+    uint32_t count;         /**< @brief Number of elements used */
+    uint32_t size;			/**< @brief Size of buffer */
+}xifo64_t;
+
+/**< @brief   Circular Buffer memory pool type. */
+typedef uint64_t xifo64_pool_t;
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+/* xifo Common */
+void xifo64_init( xifo64_t *c, uint32_t size, uint64_t *startpool );
+void xifo64_clear( xifo64_t *c );
+uint32_t xifo64_write( xifo64_t *c, uint64_t data );
+/* FIFO use */
+uint64_t xifo64_read_lr( xifo64_t *c, uint32_t index );
+uint64_t xifo64_pop_lr( xifo64_t *c );
+/* LIFO use */
+uint64_t xifo64_read_mr( xifo64_t *c, uint32_t index );
+uint64_t xifo64_pop_mr( xifo64_t *c );
+/* Extractors */
+uint32_t xifo64_get_size( xifo64_t *c );
+uint32_t xifo64_get_used( xifo64_t *c );
+uint32_t xifo64_get_full( xifo64_t *c );
+uint32_t xifo64_get_free( xifo64_t *c );
+#ifdef __cplusplus
+}
+#endif
+#endif
+
+#if xIFO_USE_32BIT == TRUE
+/**
+ * @brief   Circular Buffer object.
+ * @details This struct holds the object of a circular buffer
+ */
+typedef struct  {
+    /* Pointers: */
+    uint32_t *startpool;    /**< @brief First element in pool */
+    uint32_t *endpool;      /**< @brief Last element in pool */
+    uint32_t *read;			/**< @brief Read pointer */
+    uint32_t *write;		/**< @brief Write pointer */
+    /* Variables: */
+    uint32_t full;          /**< @brief Flag indicating buffer is full */
+    uint32_t count;         /**< @brief Number of elements used */
+    uint32_t size;			/**< @brief Size of buffer */
+}xifo32_t;
+
+/**< @brief   Circular Buffer memory pool type. */
+typedef uint32_t xifo32_pool_t;
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+/* xifo Common */
+void xifo32_init( xifo32_t *c, uint32_t size, uint32_t *startpool );
+void xifo32_clear( xifo32_t *c );
+uint32_t xifo32_write( xifo32_t *c, uint32_t data );
+/* FIFO use */
+uint32_t xifo32_read_lr( xifo32_t *c, uint32_t index );
+uint32_t xifo32_pop_lr( xifo32_t *c );
+/* LIFO use */
+uint32_t xifo32_read_mr( xifo32_t *c, uint32_t index );
+uint32_t xifo32_pop_mr( xifo32_t *c );
+/* Extractors */
+uint32_t xifo32_get_size( xifo32_t *c );
+uint32_t xifo32_get_used( xifo32_t *c );
+uint32_t xifo32_get_full( xifo32_t *c );
+uint32_t xifo32_get_free( xifo32_t *c );
+#ifdef __cplusplus
+}
+#endif
+#endif
+
+#if xIFO_USE_16BIT == TRUE
+/**
+ * @brief   Circular Buffer object.
+ * @details This struct holds the object of a circular buffer
+ */
+typedef struct  {
+    /* Pointers: */
+    uint16_t *startpool;    /**< @brief First element in pool */
+    uint16_t *endpool;      /**< @brief Last element in pool */
+    uint16_t *read;         /**< @brief Read pointer */
+    uint16_t *write;        /**< @brief Write pointer */
+    /* Variables: */
+    uint32_t full;          /**< @brief Flag indicating buffer is full */
+    uint32_t count;         /**< @brief Number of elements used */
+    uint32_t size;          /**< @brief Size of buffer */
+}xifo16_t;
+
+/**
+ * @brief   Circular Buffer memory pool type.
+ */
+typedef uint16_t xifo16_pool_t;
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+/* xifo Common */
+void xifo16_init( xifo16_t *c, uint32_t size, uint16_t *startpool);
+void xifo16_clear( xifo16_t *c);
+uint32_t xifo16_write( xifo16_t *c, uint16_t data);
+/* FIFO use */
+uint16_t xifo16_read_lr( xifo16_t *c, uint32_t index);
+uint16_t xifo16_pop_lr( xifo16_t *c);
+/* LIFO use */
+uint16_t xifo16_read_mr( xifo16_t *c, uint32_t index);
+uint16_t xifo16_pop_mr( xifo16_t *c);
+/* Extractors */
+uint32_t xifo16_get_size( xifo16_t *c);
+uint32_t xifo16_get_used( xifo16_t *c);
+uint32_t xifo16_get_full( xifo16_t *c);
+uint32_t xifo16_get_free( xifo16_t *c);
+#ifdef __cplusplus
+}
+#endif
+#endif
+
+#if xIFO_USE_8BIT == TRUE
+/**
+ * @brief   Circular Buffer object.
+ * @details This struct holds the object of a circular buffer
+ */
+typedef struct  {
+    /* Pointers: */
+    uint8_t *startpool;     /**< @brief First element in pool */
+    uint8_t *endpool;       /**< @brief Last element in pool */
+    uint8_t *read;          /**< @brief Read pointer */
+    uint8_t *write;         /**< @brief Write pointer */
+    /* Variables: */
+    uint32_t full;          /**< @brief Flag indicating buffer is full */
+    uint32_t count;         /**< @brief Number of elements used */
+    uint32_t size;			/**< @brief Size of buffer */
+}xifo8_t;
+
+/**< @brief   Circular Buffer memory pool type. */
+typedef uint8_t xifo8_pool_t;
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+/* xifo Common */
+void xifo8_init(xifo8_t *c, uint32_t size, uint8_t *startpool );
+void xifo8_clear( xifo8_t *c );
+uint32_t xifo8_write( xifo8_t *c, uint8_t data );
+/* FIFO use */
+uint8_t xifo8_read_lr( xifo8_t *c, uint32_t index );
+uint8_t xifo8_pop_lr( xifo8_t *c );
+/* LIFO use */
+uint8_t xifo8_read_mr( xifo8_t *c, uint32_t index );
+uint8_t xifo8_pop_mr( xifo8_t *c );
+/* Extractors */
+uint32_t xifo8_get_size( xifo8_t *c );
+uint32_t xifo8_get_used( xifo8_t *c );
+uint32_t xifo8_get_full( xifo8_t *c );
+uint32_t xifo8_get_free( xifo8_t *c );
+#ifdef __cplusplus
+}
+#endif
+#endif
 
 #endif //_xifo_H_
 
