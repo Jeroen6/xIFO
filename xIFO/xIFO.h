@@ -120,7 +120,7 @@ public:
     }
 
     /**
-     * @brief   Clear buffer contents
+     * @brief   Clear buffer memory pool
      * @note    Must be used on initialised buffer object.
      * @param[in] c   Pointer to @p xifo_SIZETYPE_t object.
      */
@@ -130,6 +130,23 @@ public:
         while(ptemp <= endpool){
             *ptemp++ = 0;
         }
+    }
+	
+	 /**
+     * @brief  	Reset buffer
+     * @note    Must be used on initialised buffer object.
+     * @param[in] c   Pointer to @p xifo_SIZETYPE_t object.
+     */
+    void reset(void)
+    {
+        register xifo_dtype *ptemp = startpool;
+        while(ptemp <= endpool){
+            *ptemp++ = 0;
+        }
+		ifull 		= 0;
+        icount      = 0;
+        read 		= startpool;
+        pwrite		= startpool;
     }
 
     /**

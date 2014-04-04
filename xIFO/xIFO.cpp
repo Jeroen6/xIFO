@@ -54,7 +54,7 @@ void xifo64_init(xifo64_t *c, uint32_t s, uint64_t *sp){
 }
 
 /**
- * @brief   Clear buffer contents
+ * @brief   Clear buffer memory pool
  *
  * @note    Must be used on initialised buffer object.
  *
@@ -331,7 +331,7 @@ void xifo32_init(xifo32_t *c, uint32_t s, uint32_t *sp){
 }
 
 /**
- * @brief   Clear buffer contents
+ * @brief   Clear buffer memory pool
  *
  * @note    Must be used on initialised buffer object.
  *
@@ -607,7 +607,7 @@ void xifo16_init(xifo16_t *c, uint32_t s, uint16_t *sp){
 }
 
 /**
- * @brief   Clear buffer contents
+ * @brief   Clear buffer memory pool
  *
  * @note    Must be used on initialised buffer object.
  *
@@ -884,7 +884,7 @@ void xifo8_init(xifo8_t *c, uint32_t s, uint8_t *sp){
 }
 
 /**
- * @brief   Clear buffer contents
+ * @brief   Clear buffer memory pool
  *
  * @note    Must be used on initialised buffer object.
  *
