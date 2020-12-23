@@ -36,7 +36,7 @@ The C part is like a C++ class, it is a C module. It does work object oriented, 
 ### Usage C:
 ```c
 xifo_pool_t input_buffer[100];
-xifo_t input[100];
+xifo_t input;
 xifo_init(&input, 100, input_buffer);
 void xifo_clear( &input );
 // Write while not full
