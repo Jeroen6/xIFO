@@ -66,6 +66,7 @@
 #endif
 
 
+#ifdef __cplusplus
 #if xIFO_USE_CPP == TRUE
 /**
  * @brief   Circular Buffer object.
@@ -365,7 +366,11 @@ private:
     uint32_t isize;          /**< @brief Size of buffer */
 };
 #endif
+#endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 #if xIFO_USE_64BIT == TRUE
 /**
  * @brief   Circular Buffer object.
@@ -386,9 +391,6 @@ typedef struct  {
 /**< @brief   Circular Buffer memory pool type. */
 typedef uint64_t xifo64_pool_t;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 /* xifo Common */
 void xifo64_init( xifo64_t *c, uint32_t size, uint64_t *startpool );
 void xifo64_clear( xifo64_t *c );
@@ -404,9 +406,6 @@ uint32_t xifo64_get_size( xifo64_t *c );
 uint32_t xifo64_get_used( xifo64_t *c );
 uint32_t xifo64_get_full( xifo64_t *c );
 uint32_t xifo64_get_free( xifo64_t *c );
-#ifdef __cplusplus
-}
-#endif
 #endif
 
 #if xIFO_USE_32BIT == TRUE
@@ -429,9 +428,6 @@ typedef struct  {
 /**< @brief   Circular Buffer memory pool type. */
 typedef uint32_t xifo32_pool_t;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 /* xifo Common */
 void xifo32_init( xifo32_t *c, uint32_t size, uint32_t *startpool );
 void xifo32_clear( xifo32_t *c );
@@ -447,9 +443,6 @@ uint32_t xifo32_get_size( xifo32_t *c );
 uint32_t xifo32_get_used( xifo32_t *c );
 uint32_t xifo32_get_full( xifo32_t *c );
 uint32_t xifo32_get_free( xifo32_t *c );
-#ifdef __cplusplus
-}
-#endif
 #endif
 
 #if xIFO_USE_16BIT == TRUE
@@ -474,9 +467,6 @@ typedef struct  {
  */
 typedef uint16_t xifo16_pool_t;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 /* xifo Common */
 void xifo16_init( xifo16_t *c, uint32_t size, uint16_t *startpool);
 void xifo16_clear( xifo16_t *c);
@@ -492,9 +482,6 @@ uint32_t xifo16_get_size( xifo16_t *c);
 uint32_t xifo16_get_used( xifo16_t *c);
 uint32_t xifo16_get_full( xifo16_t *c);
 uint32_t xifo16_get_free( xifo16_t *c);
-#ifdef __cplusplus
-}
-#endif
 #endif
 
 #if xIFO_USE_8BIT == TRUE
@@ -517,9 +504,6 @@ typedef struct  {
 /**< @brief   Circular Buffer memory pool type. */
 typedef uint8_t xifo8_pool_t;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 /* xifo Common */
 void xifo8_init(xifo8_t *c, uint32_t size, uint8_t *startpool );
 void xifo8_clear( xifo8_t *c );
@@ -535,11 +519,12 @@ uint32_t xifo8_get_size( xifo8_t *c );
 uint32_t xifo8_get_used( xifo8_t *c );
 uint32_t xifo8_get_full( xifo8_t *c );
 uint32_t xifo8_get_free( xifo8_t *c );
-#ifdef __cplusplus
-}
 #endif
 #endif
 
+#ifdef __cplusplus
+}
+#endif
 #endif //_xifo_H_
 
 /** @} */
